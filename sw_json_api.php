@@ -16,23 +16,17 @@ if ( !defined( 'ABSPATH' ) )
 class SWJsonApi{
     function __construct(){
         global $wp_query;
+
         // We add the query_var to WP
-
-       
-
         add_filter( 'query_vars', array( $this, 'addQueryVar' ) );
         
         // Make redirect to show the JSON spitout
         add_action( 'template_redirect', array( $this,'templateRedirect' ) );
 
-
-         add_filter('SWJsonApi/foobar', array($this, 'foobar'), 1, 1);
-    
+        // Add filterable function TODO
+        // add_filter('SWJsonApi/init', array($this, 'init'),10,1);
+        // apply_filters('SWJsonApi/init', array($this, 'init') );
         
-    }
-    function foobar(){
-      echo 'here';
-      return 'herro';
     }
     /* 
     Function to add Query Var json=1
@@ -75,18 +69,28 @@ class SWJsonApi{
     /* 
       get Post/Posts loop
     */
-    public function getPosts()
-    {
+    public function getPosts(){
+        
+        global $wp_query, $post;
+
         $post_data = array();
-        if ( have_posts() ) {
+
+        if (  $wp_query->have_posts() ) {
+            
             $key = 0;
-            while ( have_posts() ) {
+            
+            while (  $wp_query->have_posts() ) {
+                
                 the_post();
-                $post_id                      = get_the_ID();
-                $this->posts[$key]            = get_post();
+                
+                $post_id  = get_the_ID();
+                
+                $this->posts[$key] = get_post();
+                
                 $this->posts[$key]->thumbnail = $this->getThumbs( $post_id );
-                $this->posts[$key]->meta      = $this->getMeta( $post_id );
-               // $this->posts[$key]->foo = $this->foobar();
+                
+                $this->posts[$key]->meta = $this->getMeta( $post_id );
+               
                 $key++;
             }
         }
@@ -129,13 +133,13 @@ class SWJsonApi{
     */
     public function renderJSON()
     {
-        
         // Render the Json
         echo json_encode( $this );
         
         //Stop execution
         exit;
     }
+
 }
 // Finally initialize code
 new SWJsonApi();
