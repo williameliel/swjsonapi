@@ -4,7 +4,7 @@ Plugin Name: Sideways JSON Api
 Plugin URI: http://sideways-nyc.com
 Description: Get JSON of current WP post/page/archive.
 Version: 0.1.1
-Author: WPBakery
+Author: William Garcia
 Author URI: http://sideways-nyc.com
 License: GPLv2 or later
 */
