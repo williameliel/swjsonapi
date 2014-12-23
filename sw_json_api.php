@@ -61,10 +61,17 @@ class SWJsonApi{
     Initiate & control returns
     */
     public function init(){
-        // Get loop info and extras.
-        $this->getPosts();
-        // Render json and leave.
-        $this->renderJSON();
+
+        if(!file_exists( TEMPLATEPATH . '/json-posts.php')){
+
+            // Get loop info and extras.
+            $this->getPosts();
+            // Render json and leave.
+            $this->renderJSON();
+        }else{
+            
+            get_template_part( 'json-posts.php' );
+        }
     }
     /* 
       get Post/Posts loop
@@ -119,7 +126,9 @@ class SWJsonApi{
     {
         if ( function_exists( 'get_fields' ) ) {
             $fields = get_fields( $post_id );
-            $fields = array_filter( $fields );
+            if(is_array( $fields )){
+                $fields = array_filter( $fields );
+            }
             
         } else {
             
